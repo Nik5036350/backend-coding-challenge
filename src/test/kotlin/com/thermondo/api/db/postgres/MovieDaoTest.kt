@@ -2,9 +2,9 @@ package com.thermondo.api.db.postgres
 
 import com.thermondo.api.IntegrationTest
 import com.thermondo.api.common.ResourceNotFoundException
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.Assertions.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.annotation.Rollback
 import java.time.Instant
@@ -83,7 +83,7 @@ class MovieDaoTest {
 
         val movies = movieDao.findAll()
 
-        //Since we already have 5 movies inside a migration
+        // Since we already have 5 movies inside a migration
         assertEquals(10, movies.size)
     }
 
@@ -99,16 +99,17 @@ class MovieDaoTest {
         val newDurationMinutes = 130
         val newPosterUrl = "https://some.domain/new-poster.jpg"
 
-        val updatedMovie = movieDao.update(
-            originalMovie.id, 
-            newTitle, 
-            newDescription, 
-            newGenre, 
-            newReleaseYear, 
-            newDirector, 
-            newDurationMinutes, 
-            newPosterUrl
-        )
+        val updatedMovie =
+            movieDao.update(
+                originalMovie.id,
+                newTitle,
+                newDescription,
+                newGenre,
+                newReleaseYear,
+                newDirector,
+                newDurationMinutes,
+                newPosterUrl,
+            )
 
         assertEquals(originalMovie.id, updatedMovie.id)
         assertEquals(newTitle, updatedMovie.title)

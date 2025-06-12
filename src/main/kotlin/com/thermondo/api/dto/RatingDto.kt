@@ -10,23 +10,20 @@ import java.util.UUID
 data class CreateRatingRequest(
     @field:NotNull(message = "Movie ID is required")
     val movieId: UUID,
-    
     @field:NotNull(message = "Rating value is required")
     @field:DecimalMin(value = "1.0", message = "Rating must be at least 1.0")
     @field:DecimalMax(value = "10.0", message = "Rating cannot exceed 10.0")
     val ratingValue: BigDecimal,
-    
     @field:Size(max = 1000, message = "Review cannot exceed 1000 characters")
-    val review: String?
+    val review: String?,
 )
 
 data class UpdateRatingRequest(
     @field:DecimalMin(value = "1.0", message = "Rating must be at least 1.0")
     @field:DecimalMax(value = "10.0", message = "Rating cannot exceed 10.0")
     val ratingValue: BigDecimal?,
-    
     @field:Size(max = 1000, message = "Review cannot exceed 1000 characters")
-    val review: String?
+    val review: String?,
 )
 
 data class RatingResponse(
@@ -36,8 +33,8 @@ data class RatingResponse(
     val ratingValue: BigDecimal,
     val review: String?,
     val movieTitle: String?,
-    val userName: String?
-):Serializable {
+    val userName: String?,
+) : Serializable {
     companion object {
         fun fromRating(rating: Rating): RatingResponse {
             return RatingResponse(
@@ -47,7 +44,7 @@ data class RatingResponse(
                 ratingValue = rating.ratingValue,
                 review = rating.review,
                 movieTitle = rating.movieTitle,
-                userName = rating.userName
+                userName = rating.userName,
             )
         }
     }
@@ -58,8 +55,8 @@ data class UserRatingProfileResponse(
     val userName: String,
     val totalRatings: Int,
     val averageRating: BigDecimal?,
-    val ratings: List<RatingResponse>
-):Serializable {
+    val ratings: List<RatingResponse>,
+) : Serializable {
     companion object {
         fun fromUserRatingProfile(profile: UserRatingProfile): UserRatingProfileResponse {
             return UserRatingProfileResponse(
@@ -67,17 +64,18 @@ data class UserRatingProfileResponse(
                 userName = profile.userName,
                 totalRatings = profile.totalRatings,
                 averageRating = profile.averageRating,
-                ratings = profile.ratings.map { rating ->
-                    RatingResponse(
-                        id = rating.id,
-                        userId = rating.userId,
-                        movieId = rating.movieId,
-                        ratingValue = rating.ratingValue,
-                        review = rating.review,
-                        movieTitle = rating.movieTitle,
-                        userName = rating.userName
-                    )
-                }
+                ratings =
+                    profile.ratings.map { rating ->
+                        RatingResponse(
+                            id = rating.id,
+                            userId = rating.userId,
+                            movieId = rating.movieId,
+                            ratingValue = rating.ratingValue,
+                            review = rating.review,
+                            movieTitle = rating.movieTitle,
+                            userName = rating.userName,
+                        )
+                    },
             )
         }
     }

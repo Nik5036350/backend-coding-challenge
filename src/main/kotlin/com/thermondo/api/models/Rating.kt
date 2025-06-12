@@ -5,7 +5,7 @@ import java.math.BigDecimal
 import java.time.Instant
 import java.util.UUID
 
-data class Rating (
+data class Rating(
     val id: UUID,
     val userId: UUID,
     val movieId: UUID,
@@ -14,10 +14,14 @@ data class Rating (
     val createdAt: Instant = Instant.now(),
     val updatedAt: Instant = Instant.now(),
     val movieTitle: String? = null,
-    val userName: String? = null
+    val userName: String? = null,
 ) {
     companion object {
-        fun fromRecord(ratingRecord: RatingRecord, movieTitle: String? = null, userName: String? = null): Rating {
+        fun fromRecord(
+            ratingRecord: RatingRecord,
+            movieTitle: String? = null,
+            userName: String? = null,
+        ): Rating {
             return Rating(
                 id = ratingRecord.id!!,
                 userId = ratingRecord.userId!!,
@@ -27,7 +31,7 @@ data class Rating (
                 createdAt = ratingRecord.createdAt!!,
                 updatedAt = ratingRecord.updatedAt!!,
                 movieTitle = movieTitle,
-                userName = userName
+                userName = userName,
             )
         }
     }

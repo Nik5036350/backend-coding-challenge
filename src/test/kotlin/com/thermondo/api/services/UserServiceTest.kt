@@ -9,15 +9,14 @@ import com.thermondo.api.models.User
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.time.Instant
 import java.util.*
 
 class UserServiceTest {
-
     private val userDao = mockk<UserDao>()
     private lateinit var userService: UserService
 
@@ -28,17 +27,19 @@ class UserServiceTest {
 
     @Test
     fun `should create user successfully when email is unique`() {
-        val request = CreateUserRequest(
-            name = "John Doe",
-            email = "john.doe@some.domain"
-        )
-        val expectedUser = User(
-            id = UUID.randomUUID(),
-            name = request.name,
-            email = request.email,
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
+        val request =
+            CreateUserRequest(
+                name = "John Doe",
+                email = "john.doe@some.domain",
+            )
+        val expectedUser =
+            User(
+                id = UUID.randomUUID(),
+                name = request.name,
+                email = request.email,
+                createdAt = Instant.now(),
+                updatedAt = Instant.now(),
+            )
 
         every { userDao.existsByEmail(request.email) } returns false
         every { userDao.create(request.name, request.email) } returns expectedUser
@@ -52,16 +53,18 @@ class UserServiceTest {
 
     @Test
     fun `should throw DuplicateResourceException when email already exists`() {
-        val request = CreateUserRequest(
-            name = "John Doe",
-            email = "john.doe@some.domain"
-        )
+        val request =
+            CreateUserRequest(
+                name = "John Doe",
+                email = "john.doe@some.domain",
+            )
 
         every { userDao.existsByEmail(request.email) } returns true
 
-        val exception = assertThrows<DuplicateResourceException> {
-            userService.createUser(request)
-        }
+        val exception =
+            assertThrows<DuplicateResourceException> {
+                userService.createUser(request)
+            }
 
         assertEquals("User with email ${request.email} already exists", exception.message)
         verify { userDao.existsByEmail(request.email) }
@@ -71,13 +74,14 @@ class UserServiceTest {
     @Test
     fun `should return user when user exists`() {
         val userId = UUID.randomUUID()
-        val expectedUser = User(
-            id = userId,
-            name = "John Doe",
-            email = "john.doe@some.domain",
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
+        val expectedUser =
+            User(
+                id = userId,
+                name = "John Doe",
+                email = "john.doe@some.domain",
+                createdAt = Instant.now(),
+                updatedAt = Instant.now(),
+            )
 
         every { userDao.findById(userId) } returns expectedUser
 
@@ -93,9 +97,10 @@ class UserServiceTest {
 
         every { userDao.findById(userId) } returns null
 
-        val exception = assertThrows<ResourceNotFoundException> {
-            userService.getUserById(userId)
-        }
+        val exception =
+            assertThrows<ResourceNotFoundException> {
+                userService.getUserById(userId)
+            }
 
         assertEquals("User with id $userId not found", exception.message)
         verify { userDao.findById(userId) }
@@ -103,22 +108,23 @@ class UserServiceTest {
 
     @Test
     fun `should return list of users`() {
-        val users = listOf(
-            User(
-                id = UUID.randomUUID(),
-                name = "John Doe",
-                email = "john.doe@some.domain",
-                createdAt = Instant.now(),
-                updatedAt = Instant.now()
-            ),
-            User(
-                id = UUID.randomUUID(),
-                name = "Jane Smith",
-                email = "jane.smith@some.domain",
-                createdAt = Instant.now(),
-                updatedAt = Instant.now()
+        val users =
+            listOf(
+                User(
+                    id = UUID.randomUUID(),
+                    name = "John Doe",
+                    email = "john.doe@some.domain",
+                    createdAt = Instant.now(),
+                    updatedAt = Instant.now(),
+                ),
+                User(
+                    id = UUID.randomUUID(),
+                    name = "Jane Smith",
+                    email = "jane.smith@some.domain",
+                    createdAt = Instant.now(),
+                    updatedAt = Instant.now(),
+                ),
             )
-        )
 
         every { userDao.findAll() } returns users
 
@@ -131,13 +137,14 @@ class UserServiceTest {
     fun `should update user successfully`() {
         val userId = UUID.randomUUID()
         val request = UpdateUserRequest(name = "Updated Name")
-        val expectedUser = User(
-            id = userId,
-            name = "Updated Name",
-            email = "john.doe@some.domain",
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
+        val expectedUser =
+            User(
+                id = userId,
+                name = "Updated Name",
+                email = "john.doe@some.domain",
+                createdAt = Instant.now(),
+                updatedAt = Instant.now(),
+            )
 
         every { userDao.update(userId, request.name) } returns expectedUser
 
@@ -165,9 +172,10 @@ class UserServiceTest {
 
         every { userDao.delete(userId) } returns false
 
-        val exception = assertThrows<ResourceNotFoundException> {
-            userService.deleteUser(userId)
-        }
+        val exception =
+            assertThrows<ResourceNotFoundException> {
+                userService.deleteUser(userId)
+            }
 
         assertEquals("User with id $userId not found", exception.message)
         verify { userDao.delete(userId) }

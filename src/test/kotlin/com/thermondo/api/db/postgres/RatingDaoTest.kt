@@ -2,9 +2,9 @@ package com.thermondo.api.db.postgres
 
 import com.thermondo.api.IntegrationTest
 import com.thermondo.api.common.ResourceNotFoundException
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.Assertions.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.annotation.Rollback
 import java.math.BigDecimal
@@ -15,10 +15,10 @@ import java.util.*
 class RatingDaoTest {
     @Autowired
     private lateinit var ratingDao: RatingDao
-    
+
     @Autowired
     private lateinit var userDao: UserDao
-    
+
     @Autowired
     private lateinit var movieDao: MovieDao
 
@@ -111,7 +111,7 @@ class RatingDaoTest {
         val movie3 = movieDao.create("Some Movie 3", "Some Description 3", "Comedy", 2021, "Some Director 3", 100, null)
         val movie4 = movieDao.create("Movie 4", "Description 4", "Horror", 2020, "Some Director 4", 95, null)
         val movie5 = movieDao.create("Movie 5", "Description 5", "Sci-Fi", 2019, "Some Director 5", 140, null)
-        
+
         ratingDao.create(user.id, movie1.id, BigDecimal("8.00"), "Good movie")
         ratingDao.create(user.id, movie2.id, BigDecimal("7.50"), "Nice drama")
         ratingDao.create(user.id, movie3.id, BigDecimal("9.00"), "Hilarious!")
@@ -132,7 +132,7 @@ class RatingDaoTest {
         val user4 = userDao.create("User 4", "user4@some.domain")
         val user5 = userDao.create("User 5", "user5@some.domain")
         val movie = movieDao.create("Popular Movie", "Some Description", "Action", 2023, "Some Director", 120, null)
-        
+
         ratingDao.create(user1.id, movie.id, BigDecimal("8.00"), "Good movie")
         ratingDao.create(user2.id, movie.id, BigDecimal("7.50"), "Nice action")
         ratingDao.create(user3.id, movie.id, BigDecimal("9.00"), "Amazing!")
@@ -204,7 +204,7 @@ class RatingDaoTest {
         val movie1 = movieDao.create("Some Movie 1", "Some Description 1", "Action", 2023, "Some Director 1", 120, null)
         val movie2 = movieDao.create("Some Movie 2", "Some Description 2", "Drama", 2022, "Some Director 2", 110, null)
         val movie3 = movieDao.create("Some Movie 3", "Some Description 3", "Comedy", 2021, "Some Director 3", 100, null)
-        
+
         ratingDao.create(user.id, movie1.id, BigDecimal("8.00"), "Good")
         ratingDao.create(user.id, movie2.id, BigDecimal("6.00"), "Okay")
         ratingDao.create(user.id, movie3.id, BigDecimal("9.99"), "Perfect!")
@@ -235,7 +235,7 @@ class RatingDaoTest {
         val user = userDao.create("Some User", "test@some.domain")
         val movie1 = movieDao.create("Some Movie 1", "Some Description 1", "Action", 2023, "Some Director 1", 120, null)
         val movie2 = movieDao.create("Some Movie 2", "Some Description 2", "Drama", 2022, "Some Director 2", 110, null)
-        
+
         ratingDao.create(user.id, movie1.id, BigDecimal("8.00"), "Good movie")
 
         assertTrue(ratingDao.existsByUserAndMovie(user.id, movie1.id))

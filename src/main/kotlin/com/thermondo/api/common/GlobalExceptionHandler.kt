@@ -17,7 +17,7 @@ class GlobalExceptionHandler {
         log.warn("Resource not found: ${ex.message}")
         return ResponseEntity(
             ErrorResponse("RESOURCE_NOT_FOUND", ex.message ?: "Resource not found"),
-            HttpStatus.NOT_FOUND
+            HttpStatus.NOT_FOUND,
         )
     }
 
@@ -26,7 +26,7 @@ class GlobalExceptionHandler {
         log.warn("Duplicate resource: ${ex.message}")
         return ResponseEntity(
             ErrorResponse("DUPLICATE_RESOURCE", ex.message ?: "Resource already exists"),
-            HttpStatus.CONFLICT
+            HttpStatus.CONFLICT,
         )
     }
 
@@ -35,7 +35,7 @@ class GlobalExceptionHandler {
         log.warn("Validation error: ${ex.message}")
         return ResponseEntity(
             ErrorResponse("VALIDATION_ERROR", ex.message ?: "Validation failed"),
-            HttpStatus.BAD_REQUEST
+            HttpStatus.BAD_REQUEST,
         )
     }
 
@@ -46,7 +46,7 @@ class GlobalExceptionHandler {
         log.warn("Method argument validation error: $message")
         return ResponseEntity(
             ErrorResponse("VALIDATION_ERROR", message),
-            HttpStatus.BAD_REQUEST
+            HttpStatus.BAD_REQUEST,
         )
     }
 
@@ -55,12 +55,12 @@ class GlobalExceptionHandler {
         log.error("Unexpected error: ${ex.message}", ex)
         return ResponseEntity(
             ErrorResponse("INTERNAL_ERROR", "An unexpected error occurred"),
-            HttpStatus.INTERNAL_SERVER_ERROR
+            HttpStatus.INTERNAL_SERVER_ERROR,
         )
     }
 }
 
 data class ErrorResponse(
     val code: String,
-    val message: String
+    val message: String,
 )

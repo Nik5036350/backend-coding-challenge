@@ -15,15 +15,16 @@ import java.util.*
 @RestController
 @RequestMapping("/api/v1/users")
 @Tag(name = "Users", description = "User management endpoints")
-class UserV1Controller (
+class UserV1Controller(
     private val userService: UserService,
 ) {
-
     private val logger = LoggerFactory.getLogger(UserV1Controller::class.java)
 
     @PostMapping
     @Operation(summary = "Create a new user")
-    fun createUser(@Valid @RequestBody request: CreateUserRequest): ResponseEntity<UserResponse> {
+    fun createUser(
+        @Valid @RequestBody request: CreateUserRequest,
+    ): ResponseEntity<UserResponse> {
         logger.info("Creating user with email: ${request.email}")
         val response = fromUser(userService.createUser(request))
         return ResponseEntity.status(HttpStatus.CREATED).body(response)
@@ -31,7 +32,9 @@ class UserV1Controller (
 
     @GetMapping("/{id}")
     @Operation(summary = "Get user by ID")
-    fun getUserById(@PathVariable id: UUID): ResponseEntity<UserResponse> {
+    fun getUserById(
+        @PathVariable id: UUID,
+    ): ResponseEntity<UserResponse> {
         logger.debug("Fetching user with id: $id")
         val response = fromUser(userService.getUserById(id))
         return ResponseEntity.ok(response)
@@ -39,12 +42,12 @@ class UserV1Controller (
 
     @GetMapping
     @Operation(summary = "Get all users")
-    fun getAllUsers(
-    ): ResponseEntity<List<UserResponse>> {
+    fun getAllUsers(): ResponseEntity<List<UserResponse>> {
         logger.debug("Fetching all users")
-        val response = userService.getAllUsers().map { user ->
-            fromUser(user)
-        }
+        val response =
+            userService.getAllUsers().map { user ->
+                fromUser(user)
+            }
         return ResponseEntity.ok(response)
     }
 
@@ -52,7 +55,7 @@ class UserV1Controller (
     @Operation(summary = "Update user")
     fun updateUser(
         @PathVariable id: UUID,
-        @Valid @RequestBody request: UpdateUserRequest
+        @Valid @RequestBody request: UpdateUserRequest,
     ): ResponseEntity<UserResponse> {
         logger.info("Updating user with id: $id")
         val response = fromUser(userService.updateUser(id, request))
@@ -61,7 +64,9 @@ class UserV1Controller (
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete user")
-    fun deleteUser(@PathVariable id: UUID): ResponseEntity<Map<String, String>> {
+    fun deleteUser(
+        @PathVariable id: UUID,
+    ): ResponseEntity<Map<String, String>> {
         logger.info("Deleting user with id: $id")
         userService.deleteUser(id)
         return ResponseEntity.ok(mapOf("message" to "User deleted successfully"))

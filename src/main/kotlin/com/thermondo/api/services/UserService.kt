@@ -17,47 +17,49 @@ class UserService(
 
     fun createUser(request: CreateUserRequest): User {
         logger.info("Creating user with email: ${request.email}")
-        
+
         if (userDao.existsByEmail(request.email)) {
             throw DuplicateResourceException("User with email ${request.email} already exists")
         }
-        
+
         val user = userDao.create(request.name, request.email)
         logger.info("Successfully created user with id: ${user.id}")
-        
+
         return user
     }
 
     fun getUserById(id: UUID): User {
         logger.debug("Fetching user with id: $id")
-        
+
         return userDao.findById(id)
             ?: throw ResourceNotFoundException("User with id $id not found")
-
     }
 
     fun getAllUsers(): List<User> {
         logger.debug("Fetching all users")
-        
+
         return userDao.findAll()
     }
 
-    fun updateUser(id: UUID, request: UpdateUserRequest): User {
+    fun updateUser(
+        id: UUID,
+        request: UpdateUserRequest,
+    ): User {
         logger.info("Updating user with id: $id")
-        
+
         val user = userDao.update(id, request.name)
         logger.info("Successfully updated user with id: ${user.id}")
-        
+
         return user
     }
 
     fun deleteUser(id: UUID): Boolean {
         logger.info("Deleting user with id: $id")
-        
+
         if (!userDao.delete(id)) {
             throw ResourceNotFoundException("User with id $id not found")
         }
-        
+
         logger.info("Successfully deleted user with id: $id")
         return true
     }

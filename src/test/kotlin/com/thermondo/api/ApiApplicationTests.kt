@@ -4,9 +4,7 @@ import org.junit.jupiter.api.Test
 
 @IntegrationTest
 class ApiApplicationTests {
-
-	@Test
-	fun contextLoads() {
-	}
-
+    @Test
+    fun contextLoads() {
+    }
 }

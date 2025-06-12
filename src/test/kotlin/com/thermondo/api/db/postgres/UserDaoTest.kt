@@ -2,9 +2,9 @@ package com.thermondo.api.db.postgres
 
 import com.thermondo.api.IntegrationTest
 import com.thermondo.api.common.ResourceNotFoundException
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.Assertions.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.annotation.Rollback
 import java.time.Instant

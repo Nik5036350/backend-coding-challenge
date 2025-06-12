@@ -4,7 +4,7 @@ import com.thermondo.api.db.postgres.tables.records.MovieRecord
 import java.time.Instant
 import java.util.UUID
 
-data class Movie (
+data class Movie(
     val id: UUID,
     val title: String,
     val description: String?,
@@ -16,10 +16,14 @@ data class Movie (
     val createdAt: Instant = Instant.now(),
     val updatedAt: Instant = Instant.now(),
     val averageRating: Double? = null,
-    val totalRatings: Int = 0
+    val totalRatings: Int = 0,
 ) {
     companion object {
-        fun fromRecord(movieRecord: MovieRecord, averageRating: Double? = null, totalRatings: Int = 0): Movie {
+        fun fromRecord(
+            movieRecord: MovieRecord,
+            averageRating: Double? = null,
+            totalRatings: Int = 0,
+        ): Movie {
             return Movie(
                 id = movieRecord.id!!,
                 title = movieRecord.title!!,
@@ -32,7 +36,7 @@ data class Movie (
                 createdAt = movieRecord.createdAt!!,
                 updatedAt = movieRecord.updatedAt!!,
                 averageRating = averageRating,
-                totalRatings = totalRatings
+                totalRatings = totalRatings,
             )
         }
     }

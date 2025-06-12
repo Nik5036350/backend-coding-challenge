@@ -9,7 +9,6 @@ import org.springframework.security.web.SecurityFilterChain
 @Configuration
 @EnableWebSecurity
 class SecurityConfig {
-
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         // TODO configure propper auth
@@ -19,7 +18,7 @@ class SecurityConfig {
                 authz
                     .anyRequest().permitAll()
             }
-        
+
         return http.build()
     }
 }

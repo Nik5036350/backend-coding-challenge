@@ -11,7 +11,9 @@ const val TEST_PROFILE = "test"
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 @ActiveProfiles(TEST_PROFILE)
-@ContextConfiguration(initializers = [
-    PostgreSQLTestContainerConfiguration::class
-])
+@ContextConfiguration(
+    initializers = [
+        PostgreSQLTestContainerConfiguration::class,
+    ],
+)
 annotation class IntegrationTest

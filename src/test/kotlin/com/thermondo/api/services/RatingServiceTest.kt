@@ -13,16 +13,15 @@ import com.thermondo.api.models.User
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.math.BigDecimal
 import java.time.Instant
 import java.util.*
 
 class RatingServiceTest {
-
     private val ratingDao = mockk<RatingDao>()
     private val userDao = mockk<UserDao>()
     private val movieDao = mockk<MovieDao>()
@@ -37,39 +36,43 @@ class RatingServiceTest {
     fun `should create rating successfully`() {
         val userId = UUID.randomUUID()
         val movieId = UUID.randomUUID()
-        val request = CreateRatingRequest(
-            movieId = movieId,
-            ratingValue = BigDecimal("8.5"),
-            review = "Great!"
-        )
-        val user = User(
-            id = userId,
-            name = "John Doe",
-            email = "john.doe@some.domain",
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
-        val movie = Movie(
-            id = movieId,
-            title = "The Matrix",
-            description = "A description",
-            genre = "Sci-Fi",
-            releaseYear = 1999,
-            director = "The Wachowskis",
-            durationMinutes = 136,
-            posterUrl = "https://some.domain/poster.jpg",
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
-        val expectedRating = Rating(
-            id = UUID.randomUUID(),
-            userId = userId,
-            movieId = movieId,
-            ratingValue = request.ratingValue,
-            review = request.review,
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
+        val request =
+            CreateRatingRequest(
+                movieId = movieId,
+                ratingValue = BigDecimal("8.5"),
+                review = "Great!",
+            )
+        val user =
+            User(
+                id = userId,
+                name = "John Doe",
+                email = "john.doe@some.domain",
+                createdAt = Instant.now(),
+                updatedAt = Instant.now(),
+            )
+        val movie =
+            Movie(
+                id = movieId,
+                title = "The Matrix",
+                description = "A description",
+                genre = "Sci-Fi",
+                releaseYear = 1999,
+                director = "The Wachowskis",
+                durationMinutes = 136,
+                posterUrl = "https://some.domain/poster.jpg",
+                createdAt = Instant.now(),
+                updatedAt = Instant.now(),
+            )
+        val expectedRating =
+            Rating(
+                id = UUID.randomUUID(),
+                userId = userId,
+                movieId = movieId,
+                ratingValue = request.ratingValue,
+                review = request.review,
+                createdAt = Instant.now(),
+                updatedAt = Instant.now(),
+            )
 
         every { userDao.findById(userId) } returns user
         every { movieDao.findById(movieId) } returns movie
@@ -79,7 +82,7 @@ class RatingServiceTest {
                 userId = userId,
                 movieId = movieId,
                 ratingValue = request.ratingValue,
-                review = request.review
+                review = request.review,
             )
         } returns expectedRating
 
@@ -96,17 +99,19 @@ class RatingServiceTest {
     fun `should throw ResourceNotFoundException when creating rating for user that does not exists`() {
         val userId = UUID.randomUUID()
         val movieId = UUID.randomUUID()
-        val request = CreateRatingRequest(
-            movieId = movieId,
-            ratingValue = BigDecimal("8.5"),
-            review = "Great!"
-        )
+        val request =
+            CreateRatingRequest(
+                movieId = movieId,
+                ratingValue = BigDecimal("8.5"),
+                review = "Great!",
+            )
 
         every { userDao.findById(userId) } returns null
 
-        val exception = assertThrows<ResourceNotFoundException> {
-            ratingService.createRating(userId, request)
-        }
+        val exception =
+            assertThrows<ResourceNotFoundException> {
+                ratingService.createRating(userId, request)
+            }
 
         assertEquals("User with id $userId not found", exception.message)
         verify { userDao.findById(userId) }
@@ -119,25 +124,28 @@ class RatingServiceTest {
     fun `should throw ResourceNotFoundException when creating rating for a movie that does not exist`() {
         val userId = UUID.randomUUID()
         val movieId = UUID.randomUUID()
-        val request = CreateRatingRequest(
-            movieId = movieId,
-            ratingValue = BigDecimal("8.5"),
-            review = "Great!"
-        )
-        val user = User(
-            id = userId,
-            name = "John Doe",
-            email = "john.doe@some.domain",
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
+        val request =
+            CreateRatingRequest(
+                movieId = movieId,
+                ratingValue = BigDecimal("8.5"),
+                review = "Great!",
+            )
+        val user =
+            User(
+                id = userId,
+                name = "John Doe",
+                email = "john.doe@some.domain",
+                createdAt = Instant.now(),
+                updatedAt = Instant.now(),
+            )
 
         every { userDao.findById(userId) } returns user
         every { movieDao.findById(movieId) } returns null
 
-        val exception = assertThrows<ResourceNotFoundException> {
-            ratingService.createRating(userId, request)
-        }
+        val exception =
+            assertThrows<ResourceNotFoundException> {
+                ratingService.createRating(userId, request)
+            }
 
         assertEquals("Movie with id $movieId not found", exception.message)
         verify { userDao.findById(userId) }
@@ -150,38 +158,42 @@ class RatingServiceTest {
     fun `should throw DuplicateResourceException when user already rated the movie`() {
         val userId = UUID.randomUUID()
         val movieId = UUID.randomUUID()
-        val request = CreateRatingRequest(
-            movieId = movieId,
-            ratingValue = BigDecimal("8.5"),
-            review = "Great!"
-        )
-        val user = User(
-            id = userId,
-            name = "John Doe",
-            email = "john.doe@some.domain",
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
-        val movie = Movie(
-            id = movieId,
-            title = "The Matrix",
-            description = "A description",
-            genre = "Sci-Fi",
-            releaseYear = 1999,
-            director = "The Wachowskis",
-            durationMinutes = 136,
-            posterUrl = "https://some.domain/poster.jpg",
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
+        val request =
+            CreateRatingRequest(
+                movieId = movieId,
+                ratingValue = BigDecimal("8.5"),
+                review = "Great!",
+            )
+        val user =
+            User(
+                id = userId,
+                name = "John Doe",
+                email = "john.doe@some.domain",
+                createdAt = Instant.now(),
+                updatedAt = Instant.now(),
+            )
+        val movie =
+            Movie(
+                id = movieId,
+                title = "The Matrix",
+                description = "A description",
+                genre = "Sci-Fi",
+                releaseYear = 1999,
+                director = "The Wachowskis",
+                durationMinutes = 136,
+                posterUrl = "https://some.domain/poster.jpg",
+                createdAt = Instant.now(),
+                updatedAt = Instant.now(),
+            )
 
         every { userDao.findById(userId) } returns user
         every { movieDao.findById(movieId) } returns movie
         every { ratingDao.existsByUserAndMovie(userId, movieId) } returns true
 
-        val exception = assertThrows<DuplicateResourceException> {
-            ratingService.createRating(userId, request)
-        }
+        val exception =
+            assertThrows<DuplicateResourceException> {
+                ratingService.createRating(userId, request)
+            }
 
         assertEquals("User has already rated this movie", exception.message)
         verify { userDao.findById(userId) }
@@ -193,15 +205,16 @@ class RatingServiceTest {
     @Test
     fun `should return rating when rating exists`() {
         val ratingId = UUID.randomUUID()
-        val expectedRating = Rating(
-            id = ratingId,
-            userId = UUID.randomUUID(),
-            movieId = UUID.randomUUID(),
-            ratingValue = BigDecimal("8.5"),
-            review = "Great!",
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
+        val expectedRating =
+            Rating(
+                id = ratingId,
+                userId = UUID.randomUUID(),
+                movieId = UUID.randomUUID(),
+                ratingValue = BigDecimal("8.5"),
+                review = "Great!",
+                createdAt = Instant.now(),
+                updatedAt = Instant.now(),
+            )
 
         every { ratingDao.findById(ratingId) } returns expectedRating
 
@@ -215,15 +228,16 @@ class RatingServiceTest {
     fun `should return rating when rating exists for user and movie`() {
         val userId = UUID.randomUUID()
         val movieId = UUID.randomUUID()
-        val expectedRating = Rating(
-            id = UUID.randomUUID(),
-            userId = userId,
-            movieId = movieId,
-            ratingValue = BigDecimal("8.5"),
-            review = "Great!",
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
+        val expectedRating =
+            Rating(
+                id = UUID.randomUUID(),
+                userId = userId,
+                movieId = movieId,
+                ratingValue = BigDecimal("8.5"),
+                review = "Great!",
+                createdAt = Instant.now(),
+                updatedAt = Instant.now(),
+            )
 
         every { ratingDao.findByUserAndMovie(userId, movieId) } returns expectedRating
 
@@ -240,9 +254,10 @@ class RatingServiceTest {
 
         every { ratingDao.findByUserAndMovie(userId, movieId) } returns null
 
-        val exception = assertThrows<ResourceNotFoundException> {
-            ratingService.getUserRating(userId, movieId)
-        }
+        val exception =
+            assertThrows<ResourceNotFoundException> {
+                ratingService.getUserRating(userId, movieId)
+            }
 
         assertEquals("Rating not found for this user and movie", exception.message)
         verify { ratingDao.findByUserAndMovie(userId, movieId) }
@@ -251,24 +266,26 @@ class RatingServiceTest {
     @Test
     fun `should return ratings when user exists`() {
         val userId = UUID.randomUUID()
-        val user = User(
-            id = userId,
-            name = "John Doe",
-            email = "john.doe@some.domain",
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
-        val ratings = listOf(
-            Rating(
-                id = UUID.randomUUID(),
-                userId = userId,
-                movieId = UUID.randomUUID(),
-                ratingValue = BigDecimal("8.5"),
-                review = "Great!",
+        val user =
+            User(
+                id = userId,
+                name = "John Doe",
+                email = "john.doe@some.domain",
                 createdAt = Instant.now(),
-                updatedAt = Instant.now()
+                updatedAt = Instant.now(),
             )
-        )
+        val ratings =
+            listOf(
+                Rating(
+                    id = UUID.randomUUID(),
+                    userId = userId,
+                    movieId = UUID.randomUUID(),
+                    ratingValue = BigDecimal("8.5"),
+                    review = "Great!",
+                    createdAt = Instant.now(),
+                    updatedAt = Instant.now(),
+                ),
+            )
 
         every { userDao.findById(userId) } returns user
         every { ratingDao.findByUserId(userId) } returns ratings
@@ -286,9 +303,10 @@ class RatingServiceTest {
 
         every { userDao.findById(userId) } returns null
 
-        val exception = assertThrows<ResourceNotFoundException> {
-            ratingService.getRatingsByUserId(userId)
-        }
+        val exception =
+            assertThrows<ResourceNotFoundException> {
+                ratingService.getRatingsByUserId(userId)
+            }
 
         assertEquals("User with id $userId not found", exception.message)
         verify { userDao.findById(userId) }
@@ -298,29 +316,31 @@ class RatingServiceTest {
     @Test
     fun `should return ratings when movie exists`() {
         val movieId = UUID.randomUUID()
-        val movie = Movie(
-            id = movieId,
-            title = "The Matrix",
-            description = "A description",
-            genre = "Sci-Fi",
-            releaseYear = 1999,
-            director = "Wachowskis",
-            durationMinutes = 136,
-            posterUrl = "https://some.domain/poster.jpg",
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
-        val ratings = listOf(
-            Rating(
-                id = UUID.randomUUID(),
-                userId = UUID.randomUUID(),
-                movieId = movieId,
-                ratingValue = BigDecimal("8.5"),
-                review = "Great!",
+        val movie =
+            Movie(
+                id = movieId,
+                title = "The Matrix",
+                description = "A description",
+                genre = "Sci-Fi",
+                releaseYear = 1999,
+                director = "Wachowskis",
+                durationMinutes = 136,
+                posterUrl = "https://some.domain/poster.jpg",
                 createdAt = Instant.now(),
-                updatedAt = Instant.now()
+                updatedAt = Instant.now(),
             )
-        )
+        val ratings =
+            listOf(
+                Rating(
+                    id = UUID.randomUUID(),
+                    userId = UUID.randomUUID(),
+                    movieId = movieId,
+                    ratingValue = BigDecimal("8.5"),
+                    review = "Great!",
+                    createdAt = Instant.now(),
+                    updatedAt = Instant.now(),
+                ),
+            )
 
         every { movieDao.findById(movieId) } returns movie
         every { ratingDao.findByMovieId(movieId) } returns ratings
@@ -338,9 +358,10 @@ class RatingServiceTest {
 
         every { movieDao.findById(movieId) } returns null
 
-        val exception = assertThrows<ResourceNotFoundException> {
-            ratingService.getRatingsByMovieId(movieId)
-        }
+        val exception =
+            assertThrows<ResourceNotFoundException> {
+                ratingService.getRatingsByMovieId(movieId)
+            }
 
         assertEquals("Movie with id $movieId not found", exception.message)
         verify { movieDao.findById(movieId) }
@@ -350,25 +371,27 @@ class RatingServiceTest {
     @Test
     fun `should update rating successfully`() {
         val ratingId = UUID.randomUUID()
-        val request = UpdateRatingRequest(
-            ratingValue = BigDecimal("9.0"),
-            review = "updated rating"
-        )
-        val expectedRating = Rating(
-            id = ratingId,
-            userId = UUID.randomUUID(),
-            movieId = UUID.randomUUID(),
-            ratingValue = request.ratingValue!!,
-            review = request.review,
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
+        val request =
+            UpdateRatingRequest(
+                ratingValue = BigDecimal("9.0"),
+                review = "updated rating",
+            )
+        val expectedRating =
+            Rating(
+                id = ratingId,
+                userId = UUID.randomUUID(),
+                movieId = UUID.randomUUID(),
+                ratingValue = request.ratingValue!!,
+                review = request.review,
+                createdAt = Instant.now(),
+                updatedAt = Instant.now(),
+            )
 
         every {
             ratingDao.update(
                 id = ratingId,
                 ratingValue = request.ratingValue,
-                review = request.review
+                review = request.review,
             )
         } returns expectedRating
 
@@ -396,9 +419,10 @@ class RatingServiceTest {
 
         every { ratingDao.delete(ratingId) } returns false
 
-        val exception = assertThrows<ResourceNotFoundException> {
-            ratingService.deleteRating(ratingId)
-        }
+        val exception =
+            assertThrows<ResourceNotFoundException> {
+                ratingService.deleteRating(ratingId)
+            }
 
         assertEquals("Rating with id $ratingId not found", exception.message)
         verify { ratingDao.delete(ratingId) }
@@ -407,37 +431,39 @@ class RatingServiceTest {
     @Test
     fun `should return user rating profile when user exists`() {
         val userId = UUID.randomUUID()
-        val user = User(
-            id = userId,
-            name = "John Doe",
-            email = "john.doe@some.domain",
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
-        val ratings = listOf(
-            Rating(
-                id = UUID.randomUUID(),
-                userId = userId,
-                movieId = UUID.randomUUID(),
-                ratingValue = BigDecimal("8.5"),
-                review = "Great!",
+        val user =
+            User(
+                id = userId,
+                name = "John Doe",
+                email = "john.doe@some.domain",
                 createdAt = Instant.now(),
                 updatedAt = Instant.now(),
-                movieTitle = "The Matrix",
-                userName = "John Doe"
-            ),
-            Rating(
-                id = UUID.randomUUID(),
-                userId = userId,
-                movieId = UUID.randomUUID(),
-                ratingValue = BigDecimal("7.0"),
-                review = "Good movie",
-                createdAt = Instant.now(),
-                updatedAt = Instant.now(),
-                movieTitle = "The Godfather",
-                userName = "John Doe"
             )
-        )
+        val ratings =
+            listOf(
+                Rating(
+                    id = UUID.randomUUID(),
+                    userId = userId,
+                    movieId = UUID.randomUUID(),
+                    ratingValue = BigDecimal("8.5"),
+                    review = "Great!",
+                    createdAt = Instant.now(),
+                    updatedAt = Instant.now(),
+                    movieTitle = "The Matrix",
+                    userName = "John Doe",
+                ),
+                Rating(
+                    id = UUID.randomUUID(),
+                    userId = userId,
+                    movieId = UUID.randomUUID(),
+                    ratingValue = BigDecimal("7.0"),
+                    review = "Good movie",
+                    createdAt = Instant.now(),
+                    updatedAt = Instant.now(),
+                    movieTitle = "The Godfather",
+                    userName = "John Doe",
+                ),
+            )
         val averageRating = BigDecimal("7.75")
         val totalRatings = 2
 

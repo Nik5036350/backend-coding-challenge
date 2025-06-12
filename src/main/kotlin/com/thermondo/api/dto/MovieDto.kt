@@ -9,44 +9,32 @@ data class CreateMovieRequest(
     @field:NotBlank(message = "Title is required")
     @field:Size(min = 1, max = 200, message = "Title must be between 1 and 200 characters")
     val title: String,
-    
     @field:Size(max = 1000, message = "Description cannot exceed 1000 characters")
     val description: String?,
-    
     @field:NotBlank(message = "Genre is required")
     val genre: String,
-    
     @field:Min(value = 1888, message = "Release year must be 1888 or later")
     @field:Max(value = 2025, message = "Release year cannot be in the far future")
     val releaseYear: Int,
-    
     val director: String?,
-    
     @field:Min(value = 1, message = "Duration must be at least 1 minute")
     val durationMinutes: Int?,
-    
-    val posterUrl: String?
+    val posterUrl: String?,
 )
 
 data class UpdateMovieRequest(
     @field:Size(min = 1, max = 200, message = "Title must be between 1 and 200 characters")
     val title: String?,
-    
     @field:Size(max = 1000, message = "Description cannot exceed 1000 characters")
     val description: String?,
-    
     val genre: String?,
-    
     @field:Min(value = 1888, message = "Release year must be 1888 or later")
     @field:Max(value = 2025, message = "Release year cannot be in the far future")
     val releaseYear: Int?,
-    
     val director: String?,
-    
     @field:Min(value = 1, message = "Duration must be at least 1 minute")
     val durationMinutes: Int?,
-    
-    val posterUrl: String?
+    val posterUrl: String?,
 )
 
 data class MovieResponse(
@@ -59,8 +47,8 @@ data class MovieResponse(
     val durationMinutes: Int?,
     val posterUrl: String?,
     val averageRating: Double?,
-    val totalRatings: Int
-): Serializable {
+    val totalRatings: Int,
+) : Serializable {
     companion object {
         fun fromMovie(movie: Movie): MovieResponse {
             return MovieResponse(
@@ -73,7 +61,7 @@ data class MovieResponse(
                 durationMinutes = movie.durationMinutes,
                 posterUrl = movie.posterUrl,
                 averageRating = movie.averageRating,
-                totalRatings = movie.totalRatings
+                totalRatings = movie.totalRatings,
             )
         }
     }
@@ -85,8 +73,8 @@ data class MovieSummaryResponse(
     val genre: String,
     val releaseYear: Int,
     val averageRating: Double?,
-    val totalRatings: Int
-): Serializable {
+    val totalRatings: Int,
+) : Serializable {
     companion object {
         fun fromMovie(movie: Movie): MovieSummaryResponse {
             return MovieSummaryResponse(
@@ -95,7 +83,7 @@ data class MovieSummaryResponse(
                 genre = movie.genre,
                 releaseYear = movie.releaseYear,
                 averageRating = movie.averageRating,
-                totalRatings = movie.totalRatings
+                totalRatings = movie.totalRatings,
             )
         }
     }

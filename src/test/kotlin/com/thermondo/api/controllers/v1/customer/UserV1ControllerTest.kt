@@ -22,10 +22,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.time.Instant
 import java.util.*
 
-@WebMvcTest(controllers = [UserV1Controller::class], excludeAutoConfiguration = [org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration::class])
+@WebMvcTest(
+    controllers = [UserV1Controller::class],
+    excludeAutoConfiguration = [org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration::class],
+)
 @ActiveProfiles("test")
 class UserV1ControllerTest {
-
     @Autowired
     private lateinit var mockMvc: MockMvc
 
@@ -45,13 +47,14 @@ class UserV1ControllerTest {
     @Test
     fun `should return user when it exists`() {
         val userId = UUID.randomUUID()
-        val user = User(
-            id = userId,
-            name = "John Doe",
-            email = "john.doe@some.domain",
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
+        val user =
+            User(
+                id = userId,
+                name = "John Doe",
+                email = "john.doe@some.domain",
+                createdAt = Instant.now(),
+                updatedAt = Instant.now(),
+            )
 
         every { userService.getUserById(userId) } returns user
 
@@ -65,25 +68,27 @@ class UserV1ControllerTest {
 
     @Test
     fun `should create user successfully`() {
-        val userRequest = CreateUserRequest(
-            name = "Jane Smith",
-            email = "jane.smith@some.domain"
-        )
+        val userRequest =
+            CreateUserRequest(
+                name = "Jane Smith",
+                email = "jane.smith@some.domain",
+            )
 
-        val createdUser = User(
-            id = UUID.randomUUID(),
-            name = "Jane Smith",
-            email = "jane.smith@some.domain",
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
+        val createdUser =
+            User(
+                id = UUID.randomUUID(),
+                name = "Jane Smith",
+                email = "jane.smith@some.domain",
+                createdAt = Instant.now(),
+                updatedAt = Instant.now(),
+            )
 
         every { userService.createUser(userRequest) } returns createdUser
 
         mockMvc.perform(
             post("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userRequest))
+                .content(objectMapper.writeValueAsString(userRequest)),
         )
             .andExpect(status().isCreated)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -93,22 +98,23 @@ class UserV1ControllerTest {
 
     @Test
     fun `should return users list`() {
-        val users = listOf(
-            User(
-                id = UUID.randomUUID(),
-                name = "User 1",
-                email = "user1@some.domain",
-                createdAt = Instant.now(),
-                updatedAt = Instant.now()
-            ),
-            User(
-                id = UUID.randomUUID(),
-                name = "User 2",
-                email = "user2@some.domain",
-                createdAt = Instant.now(),
-                updatedAt = Instant.now()
+        val users =
+            listOf(
+                User(
+                    id = UUID.randomUUID(),
+                    name = "User 1",
+                    email = "user1@some.domain",
+                    createdAt = Instant.now(),
+                    updatedAt = Instant.now(),
+                ),
+                User(
+                    id = UUID.randomUUID(),
+                    name = "User 2",
+                    email = "user2@some.domain",
+                    createdAt = Instant.now(),
+                    updatedAt = Instant.now(),
+                ),
             )
-        )
 
         every { userService.getAllUsers() } returns users
 
@@ -127,20 +133,21 @@ class UserV1ControllerTest {
     fun `should update user successfully`() {
         val userId = UUID.randomUUID()
         val updateRequest = UpdateUserRequest(name = "Updated Name")
-        val updatedUser = User(
-            id = userId,
-            name = "Updated Name",
-            email = "john.doe@some.domain",
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
+        val updatedUser =
+            User(
+                id = userId,
+                name = "Updated Name",
+                email = "john.doe@some.domain",
+                createdAt = Instant.now(),
+                updatedAt = Instant.now(),
+            )
 
         every { userService.updateUser(userId, updateRequest) } returns updatedUser
 
         mockMvc.perform(
             put("/api/v1/users/{id}", userId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(updateRequest))
+                .content(objectMapper.writeValueAsString(updateRequest)),
         )
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))

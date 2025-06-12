@@ -30,6 +30,7 @@ class PostgreSQLTestContainerConfiguration : ApplicationContextInitializer<Confi
             "$SPRING_DATASOURCE_PROPERTY_PREFIX.password=${POSTGRESQL_CONTAINER.password}",
         ).applyTo(configurableApplicationContext)
     }
+
     @PreDestroy
     fun stop() {
         POSTGRESQL_CONTAINER.stop()

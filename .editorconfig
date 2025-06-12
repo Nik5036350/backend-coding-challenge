@@ -1,0 +1,6 @@
+[*.{kt,kts}]
+ktlint_standard_no-wildcard-imports=disabled
+
+[**/generated-src/**]
+generated_code = true
+ktlint = disabled
