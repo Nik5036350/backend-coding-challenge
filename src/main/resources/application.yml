@@ -28,8 +28,6 @@ management:
 
 springdoc:
   group-configs:
-    - group: public
-      paths-to-match: /api/v1/public/**
     - group: all v1
       paths-to-match: /api/v1/**
 
