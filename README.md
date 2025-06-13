@@ -12,6 +12,51 @@ to systems design!**
 you are most comfortable with and those that will showcase your strongest
 performance. 💪**
 
+## Application tech stack
+- Spring Boot
+- Kotlin
+- JOOQ
+- PostgreSQL
+- Gradle
+- Flyway for database migrations
+- Docker (required for during build phase for jooq code generation, testing with testcontainers, and running db locally)
+
+## How to run the project locally
+
+1. Build the project using Gradle:
+   ```bash
+   ./gradlew build
+   ```
+2. Run postgres db locally:
+   application uses postgres as a database, so you need to have it running. To do so please navigate docker directory and run:
+   ```bash
+    docker compose up
+    ```
+3. Run the application:
+  navigate back to the root directory of the project and run with application-local profile:
+   ```bash
+   ./gradlew bootRun --args='--spring.profiles.active=local'
+   ```
+4. It is also possible to run the application using IDE, just make sure using the
+   `application-local.yml` profile.
+5. Once the application is running, you can access the API documentation at:
+   [http://localhost:8080/swagger-ui/index.html#/](http://localhost:8080/swagger-ui/index.html#/)
+
+## Running via Docker
+It is also possible to run containerized version, but due to the way Jooq works you
+need to build app first locally:
+
+1. Build the project using Gradle:
+   ```bash
+   ./gradlew build
+   ```
+2. Once the build is successful, you can run the application using docker-compose.yml in the root directory of the project(in will sping up both service and the db):
+   ```bash
+   docker compose up
+   ```
+3. Once the application is running, you can access the API documentation at:
+   [http://localhost:8080/swagger-ui/index.html#/](http://localhost:8080/swagger-ui/index.html#/)
+
 ## ✅ Requirements
 
 - ✅ The backend should expose RESTful endpoints to handle user input and
@@ -28,6 +73,8 @@ performance. 💪**
 ## ✨ Bonus Points
 
 - [TODO] Implement authentication and authorization mechanisms for users.
+  (I have  decided leave it for a discussion since in case of Spring boot it is more configuration related, but still takes a lot of time to do it right
+  and would extend the scope beyond reasonable time limit)
 - ✅ Provide documentation for your API endpoints using tools like Swagger. http://localhost:8080/swagger-ui/index.html#/
 - ✅ Implement logging to record errors and debug information.
 - ✅ Implement caching mechanisms to improve the rating system's performance.

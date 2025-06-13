@@ -2,7 +2,6 @@ spring:
   application:
     name: api
 
-
   flyway:
     enabled: true
     baselineOnMigrate: true

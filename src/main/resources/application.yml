@@ -6,8 +6,7 @@ spring:
     name: api
 
   datasource:
-    #    url: jdbc:postgresql://postgres-db/thermondo_db
-    url: jdbc:postgresql://192.168.1.61/thermondo_db
+    url: jdbc:postgresql://postgres-db/thermondo_db
     username: atuin
     password: at_pass_wd
 
